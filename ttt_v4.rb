@@ -1,4 +1,3 @@
-
 #Constantant reprisentng the moves until the board is full
 BOARD_SIZE = 9
 
@@ -16,7 +15,7 @@ WIN_COMBINATIONS = [
 
 # global variable for our board to be filled with X and O
 $board = []
-
+$player = ""
 # Print the grid one function
 def display_board
   puts " #{$board[0]} | #{$board[1]} | #{$board[2]} "
@@ -58,14 +57,17 @@ def position_taken?(input)
 end
 
 # check if some player has won
-def won?
+def won
   WIN_COMBINATIONS.each do |combo|
-    combo.all? do |x|
-    x==player
-    
-   
+    combo.each_cons(3) do |x, y, z|
+      if $board[x] == "X" && $board[y] == "X" && $board[z] == "X"
+        $player = "X"
+        break
+      elsif $board[x] == "O" && $board[y] == "O" && $board[z] == "O"
+        $player = "O"
+        break
+      end
     end
-  
   end
 end
 
@@ -80,7 +82,7 @@ end
 
 # check if board if full
 def board_full?
-  $board.count("X") + $board.count("O") == BOARD_SIZE
+   $board.count("X") + $board.count("O") == BOARD_SIZE 
 end
 
 #player 1 his move and validation
@@ -116,17 +118,24 @@ def running_the_game
   loop do
     player1
 
-    if won?
-      player = $board[won?.first]
 
-      puts "congrats #{player} you won "
+    if  !won  && board_full?  
+      puts "Cats game"
+     break 
 
-      break
-    elsif board_full? && !won?
-      puts "Cat's game"
+    elsif  won  && board_full?  
+      puts "Congrats #{$player} won"
+      
+     break 
     end
+    
+ 
+      
+   
+    
+      
     player2
   end
 end
 
-#running_the_game
+running_the_game
