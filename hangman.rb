@@ -48,9 +48,7 @@ def make_guess
     elsif good_guess #Condition if we gues correcly the word.
       puts "You are correct!"
 
-      print_teaser  guess
-      
-
+      print_teaser guess
 
       if $word == $word_teaser.split.join
         puts "Congratulations... you have won this round!"
