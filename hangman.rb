@@ -21,49 +21,53 @@ end
 
 #
 def update_teaser(last_guess)
-  new_teaser = $word_teaser.split
+  new_teaser = $word_teaser
 
-  new_teaser.each_with_index do |letter, index|
+  new_teaser.chars.each_with_index do |letter, index|
     # replace blank values with guessed letter if matches letter in word
     if letter == "_" && $word[index] == last_guess
       new_teaser[index] = last_guess
     end
   end
 
-  $word_teaser = new_teaser.join(" ")
+  $word_teaser = new_teaser
 end
 
 #function for machanic of our game
 def make_guess
+  loop do
   if $lives > 0
+
     puts "Enter a letter"
     guess = gets.chomp
 
-    good_guess = $word.include? guess
+    good_guess = $word.include?(guess)
 
     #If guess is longer than 1 letter
     if guess.length > 1
       puts "only guess 1 letter at a time please!"
-      make_guess
+      
     elsif good_guess #Condition if we gues correcly the word.
       puts "You are correct!"
 
-      print_teaser guess
+      print_teaser(guess)
 
-      if $word == $word_teaser.split.join
-        puts "Congratulations... you have won this round!"
-      else
-        make_guess
+      if $word == $word_teaser
+        puts "Congratulations... you have won!"
+        break
+    
       end
     else
       #Cheking how many ives we have left
       $lives -= 1
       puts "Sorry... you have #{$lives} lives left. Try again!"
-      make_guess
+      
     end
   else
     puts "Game over... better luck next time!"
+    break
   end
+end
 end
 
 # Function for staring the game
