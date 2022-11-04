@@ -1,4 +1,3 @@
-
 #Constantant reprisentng the moves until the board is full
 BOARD_SIZE = 9
 
@@ -35,10 +34,10 @@ def next_player(player)
   #mapping[player]
 
   case
-  when player == "X"
-    return player = "O"
-  when player == "O"
-    return player = "X"
+  when player == :X
+    :O
+  when player == :O
+    :X
   end
 end
 
@@ -54,24 +53,24 @@ end
 
 #check if position is taken
 def position_taken?(input)
-  $board[input] == "X" || $board[input] == "O"
+  $board[input] == :X || $board[input] == :O
 end
 
 # check if some player has won
 def won?
   WIN_COMBINATIONS.each do |combo|
-    combo.all? do |x|
-    x==player
-    
-   
+    combo.each_cons(3) do |x, y, z|
+      if $board[x] == :X && $board[y] == :X && $board[z] == :X
+        return :X
+      elsif $board[x] == :O && $board[y] == :O && $board[z] == :O
+        return :O
+      end
     end
-  
   end
+  false
 end
 
-# def won?
-# (0.8).each_cons(3) do |combination|
-# end
+
 
 # Checikng for out of bound move is mede
 def valid_move?(input)
@@ -80,53 +79,42 @@ end
 
 # check if board if full
 def board_full?
-  $board.count("X") + $board.count("O") == BOARD_SIZE
+  $board.count(:X) + $board.count(:O) == BOARD_SIZE
 end
 
-#player 1 his move and validation
-def player1
-  current_player = "X"
-  a = gets.chomp.to_i - 1
 
-  if valid_move?(a)
-    move(current_player, a)
 
-    display_board
-  else
-    player1
-  end
+# winner functiom
+def winner?
+  puts == :X
 end
 
-#player 2 his move and validation
-def player2
-  current_player = "X"
-  a = gets.chomp.to_i - 1
-
-  if valid_move?(a)
-    move(next_player(current_player), a)
-
-    display_board
-  else
-    player2
-  end
-end
 
 # function for staring the game
 def running_the_game
+  current_player = :O
+
   loop do
-    player1
+    a = gets.chomp.to_i - 1
+
+    if valid_move?(a)
+      move(current_player, a)
+
+      display_board
+    end
 
     if won?
-      player = $board[won?.first]
-
-      puts "congrats #{player} you won "
+      puts "Congrats #{current_player} won"
 
       break
-    elsif board_full? && !won?
-      puts "Cat's game"
+
+       elsif  board_full?
+         puts "Cats game"
+       break
     end
-    player2
+
+    current_player = next_player(current_player)
   end
 end
 
-#running_the_game
+running_the_game
